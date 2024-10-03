@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Venue Dashboard</h1>
+<ul>
+  <li>Total booked venues: {{ booked_venues }}</li>
+  <li>Total available venues: {{ available_venues }}</li>
+  <li>Upcoming events: {{ upcoming_events }}</li>
+</ul>
+{% endblock %}
