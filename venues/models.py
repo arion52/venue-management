@@ -15,13 +15,16 @@ class Venue(models.Model):
 
 from datetime import timedelta
 
+from datetime import timedelta
+from django.db import models
+
 class Event(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='events')
     name = models.CharField(max_length=100)
     description = models.TextField()
     start_time = models.DateTimeField()
     duration = models.IntegerField()  # Duration in hours
-    end_time = models.DateTimeField()  # Add this field to store the end time
+    end_time = models.DateTimeField()  # End time will be auto-calculated
 
     def save(self, *args, **kwargs):
         # Automatically calculate end_time based on start_time and duration

@@ -27,49 +27,55 @@ class VenueBooking(generics.UpdateAPIView):
     serializer_class = VenueSerializer
 
     def patch(self, request, *args, **kwargs):
+        print(request.data)
         venue = self.get_object()
 
         if venue.is_booked:
             return JsonResponse({'error': 'Venue is already booked'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Extract and validate all fields, including event_name and start_time
+        # Extract and validate all fields
         required_fields = ['booked_by', 'booked_at', 'booking_duration', 'event_name', 'event_description', 'start_time']
         for field in required_fields:
             if not request.data.get(field):
                 return JsonResponse({'error': f'Missing field: {field}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Now handle all fields, including event fields
-        booked_by = request.data['booked_by']
-        booked_at = request.data['booked_at']
-        booking_duration = request.data['booking_duration']
-        event_name = request.data['event_name']
-        event_description = request.data['event_description']
-        start_time = request.data['start_time']
+        try:
+            # Parse incoming data
+            booked_by = request.data['booked_by']
+            booked_at = request.data['booked_at']
+            booking_duration = int(request.data['booking_duration'])
+            event_name = request.data['event_name']
+            event_description = request.data['event_description']
+            start_time = request.data['start_time']
 
-        # Convert start_time to a Python datetime object
-        start_time_obj = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S')
-        end_time = start_time_obj + timedelta(hours=booking_duration)
+            # Convert start_time to a Python datetime object
+            start_time_obj = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S')
+            end_time = start_time_obj + timedelta(hours=booking_duration)
 
-        if not is_venue_available(venue, start_time_obj, end_time):
-            return JsonResponse({'error': 'Venue is not available for the selected time'}, status=status.HTTP_400_BAD_REQUEST)
+            # Log venue availability check details
+            print(f"Checking venue availability: Start Time - {start_time_obj}, End Time - {end_time}")
+            if not is_venue_available(venue, start_time_obj, end_time):
+                return JsonResponse({'error': 'Venue is not available for the selected time'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create the event and update the venue
-        event = Event(
-            venue=venue,
-            name=event_name,
-            description=event_description,
-            start_time=start_time_obj,
-            duration=booking_duration
-        )
-        event.save()
+            # Create the event and update the venue
+            event = Event(
+                venue=venue,
+                name=event_name,
+                description=event_description,
+                start_time=start_time_obj,
+                duration=booking_duration
+            )
+            event.save()
 
-        venue.is_booked = True
-        venue.booked_by = booked_by
-        venue.booked_at = booked_at
-        venue.booking_duration = booking_duration
-        venue.save()
+            venue.is_booked = True
+            venue.booked_by = booked_by
+            venue.booked_at = booked_at
+            venue.booking_duration = booking_duration
+            venue.save()
 
-        return JsonResponse({'success': 'Venue booked successfully'}, status=status.HTTP_200_OK)
+            return JsonResponse({'success': 'Venue booked successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 from datetime import datetime
