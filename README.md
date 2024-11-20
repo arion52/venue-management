@@ -1,9 +1,7 @@
 # Automated Venue Booking and Occupancy Monitoring System  
 
 ## Overview  
-This software is designed to optimize venue management in academic institutions by automating booking processes and monitoring occupancy in real-time. By integrating **infrared sensor technology**, a robust **Django backend**, and a **Flutter mobile app**, the system provides a seamless and transparent user experience while enhancing operational efficiency.  
-
-frontend code [here](https://github.com/arion52/venue-management-flutter)
+This software is designed to optimize venue management in academic institutions by automating booking processes and monitoring occupancy in real-time. By integrating **infrared sensor technology**, a robust **[Django backend](https://github.com/arion52/venue-management)**, and a **[Flutter mobile app](https://github.com/arion52/venue-management-flutter)**, the system provides a seamless and transparent user experience while enhancing operational efficiency.  
 
 ---
 
