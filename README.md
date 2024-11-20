@@ -137,10 +137,3 @@ We welcome contributions to enhance the system!
 
 ## License  
 This project is licensed under the [MIT License](LICENSE).  
-
----
-
-## Contact  
-For queries or support, contact:  
-**Bargav Krishna K H, Karthikeyan Arun, Manju Varshikha S, Aarthi G**  
-Email: support@venue-booking.com
